@@ -49,7 +49,7 @@ export default class App extends Component {
 
   postFriend = (friend) => {
     axios.post('http://localhost:5000/friends', friend)
-      .then(resp => console.log(resp.data))
+      .then(this.fetchFriends)
       .catch(err => console.log(err));
   }
 

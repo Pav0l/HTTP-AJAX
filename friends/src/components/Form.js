@@ -33,6 +33,17 @@ export default class Form extends React.Component {
     })
   }
 
+  /*
+    onFriendFormSubmit = (event) => {
+      event.preventDefault();
+      const { name, age, email } = this.state;
+      this.clearFriendForm();
+      const friend = {name: name, age: Number(age), email: email};
+      this.props.addFriend(friend); // Add friend to server
+    }
+  }
+  */
+
   clearInputs = () => {
     this.setState({
       formObj: {
@@ -46,7 +57,9 @@ export default class Form extends React.Component {
 
   onSubmitHandler = e => {
     e.preventDefault();
-    this.props.postFriend(this.state.formObj);
+    const { name, age, email } = this.state.formObj;
+    const friend = {name: name, age: Number(age), email: email};
+    this.props.postFriend(friend);
     this.clearInputs();
   }
   
