@@ -19,6 +19,9 @@ export default class App extends Component {
 
   fetchFriends = () => {
     this.loaderStart();
+
+    // Fetch data with JS fetch() method
+    /*
     fetch('http://localhost:5000/friends')
       .then(data => data.json())
       .then(friends => {
@@ -26,9 +29,19 @@ export default class App extends Component {
         this.loaderFinish();
       })
       .catch(this.setError);
+    */
+
+    // Fetch data with axios
+    axios.get('http://localhost:5000/friends')
+      .then(friends => {
+        this.setState({ friends: friends.data });
+        this.loaderFinish();
+      })
+      .catch(this.setError);
   }
 
   setError = (error) => {
+    this.loaderFinish();
     this.setState({ error });
   }
 
@@ -37,7 +50,15 @@ export default class App extends Component {
     if (this.state.loading) {
       return (
         <StyledWrapper>
-          Loading some friends for your lonely soul...
+          <span role="img" aria-label="icon">⏳ </span> Loading some friends for your lonely soul...
+        </StyledWrapper>
+      );
+    }
+
+    if (this.state.error) {
+      return (
+        <StyledWrapper>
+          OH NO! We lost your friends <span role="img" aria-label="icon"> 😢</span>
         </StyledWrapper>
       );
     }
@@ -46,7 +67,7 @@ export default class App extends Component {
       <StyledWrapper>
         {
           this.state.friends && this.state.friends.map(friend => (
-            <div>
+            <div key={friend.id}>
               <span>{friend.id} - </span>
               <span>{friend.name} - </span>
               <span>{friend.age} - </span>
@@ -60,12 +81,8 @@ export default class App extends Component {
 }
 
 const StyledWrapper = styled.div`
-  font-size: 2rem;
-
+  font-size: 1rem;
   div {
-    span {
-      color: red;
-      font-size: 2rem;
-    }
+    font-size: 1rem;
   }
 `;
