@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import Table from './components/Table';
+import Form from './components/Form';
 
 export default class App extends Component {
   state = {
@@ -65,24 +67,26 @@ export default class App extends Component {
 
     return (
       <StyledWrapper>
-        {
-          this.state.friends && this.state.friends.map(friend => (
-            <div key={friend.id}>
-              <span>{friend.id} - </span>
-              <span>{friend.name} - </span>
-              <span>{friend.age} - </span>
-              <span>{friend.email}</span>
-            </div>
-          ))
-        }
+        <TableHeader>My friends database:</TableHeader>
+        
+        <Table friends={this.state.friends} />
+
+        <Form />
+
       </StyledWrapper>
     );
   }
 }
 
 const StyledWrapper = styled.div`
+  margin: 1rem auto;
+  text-align: center;
   font-size: 1rem;
-  div {
-    font-size: 1rem;
-  }
+`;
+
+const TableHeader = styled.h1`
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: navy;
+  text-align: center;
 `;
