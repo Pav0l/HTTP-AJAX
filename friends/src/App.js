@@ -47,6 +47,12 @@ export default class App extends Component {
     this.setState({ error });
   }
 
+  postFriend = (friend) => {
+    axios.post('http://localhost:5000/friends', friend)
+      .then(resp => console.log(resp.data))
+      .catch(err => console.log(err));
+  }
+
   render() {
 
     if (this.state.loading) {
@@ -71,7 +77,10 @@ export default class App extends Component {
         
         <Table friends={this.state.friends} />
 
-        <Form />
+        <Form
+          friends={this.state.friends}
+          postFriend={this.postFriend}
+        />
 
       </StyledWrapper>
     );

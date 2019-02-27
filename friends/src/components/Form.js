@@ -2,35 +2,101 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-export default function Form({ friends }) {
-  return (
+export default class Form extends React.Component {
+  // const [formObj, setFormObj] = useState({id: null, name: '', age: null, email: ''});
+  state = {
+    formObj: {
+      id: null,
+      name: '',
+      age: '',
+      email: '',
+    }
+  }
 
-    <div>
-      <FriendForm>
-        <label for="name">Name</label>
-        <input type="text" placeholder="Enter Friends Name" name="name" required />
+  // useEffect(() => {
 
-        <label for="age">Age</label>
-        <input type="text" placeholder="Enter Friends Age" name="age" required />
+  // });
 
-        <label for="email">Email</label>
-        <input type="email" placeholder="Enter Friends Email" name="enail" required />
+  formSubmit = event => {
+    event.preventDefault();
+    // setFormObj({
+    //   ...formObj,
+    //   id: friends.length + 1,
+    //   [event.target.name]: event.target.value,
+    // })
+    this.setState({
+      formObj: {
+        ...this.state.formObj,
+        id: this.props.friends.length + 1,
+        [event.target.name]: event.target.value,
+      }
+    })
+  }
+
+  clearInputs = () => {
+    this.setState({
+      formObj: {
+        id: null,
+        name: '',
+        age: '',
+        email: '',
+      }
+    })
+  }
+
+  onSubmitHandler = e => {
+    e.preventDefault();
+    this.props.postFriend(this.state.formObj);
+    this.clearInputs();
+  }
+  
+  render () {
+
+    return (
+      <FriendForm onSubmit={this.onSubmitHandler}>
+        <label htmlFor="name">Name</label>
+        <input
+          type="text"
+          placeholder="Enter Friends Name"
+          name="name"
+          autoComplete="off"
+          value={this.state.formObj.name}
+          onChange={this.formSubmit}
+          required />
+
+        <label htmlFor="age">Age</label>
+        <input
+          type="text"
+          placeholder="Enter Friends Age"
+          name="age"
+          autoComplete="off"
+          value={this.state.formObj.age}
+          onChange={this.formSubmit}
+          required />
+
+        <label htmlFor="email">Email</label>
+        <input
+          type="email"
+          placeholder="Enter Friends Email"
+          name="email"
+          autoComplete="off"
+          value={this.state.formObj.email}
+          onChange={this.formSubmit}
+          required />
 
         <button type="submit">Add Friend</button>
       </FriendForm>
-
-    </div>
-  );
+    );
+  }
 }
 
 Form.propTypes = {
-  friends: PropTypes.shape([{
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      age: PropTypes.number.isRequired,
-      email: PropTypes.string.isRequired,
-    }
-  ]),
+  friends: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    age: PropTypes.number.isRequired,
+    email: PropTypes.string.isRequired,
+  })),
 }
 
 const FriendForm = styled.form`
