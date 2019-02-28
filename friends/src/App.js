@@ -48,15 +48,17 @@ export default class App extends Component {
   }
 
   postFriend = (friend) => {
+    this.loaderStart();
     axios.post('http://localhost:5000/friends', friend)
       .then(this.fetchFriends)
-      .catch(err => console.log(err));
+      .catch(this.setError);
   }
 
   deleteFriend = (id) => {
+    this.loaderStart();
     axios.delete(`http://localhost:5000/friends/${id}`)
       .then(this.fetchFriends)
-      .catch(err => console.log(err));
+      .catch(this.setError);
   }
 
   render() {
@@ -72,7 +74,7 @@ export default class App extends Component {
     if (this.state.error) {
       return (
         <StyledWrapper>
-          OH NO! We lost your friends <span role="img" aria-label="icon"> 😢</span>
+          OH NO! We lost your friends <span role="img" aria-label="icon"> 😢</span>. {this.state.error.message}
         </StyledWrapper>
       );
     }
