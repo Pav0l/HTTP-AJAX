@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import Table from './components/Table';
 import Form from './components/Form';
+import FriendListHeader from './components/FriendListHeader';
 
 export default class App extends Component {
   state = {
@@ -141,20 +143,33 @@ export default class App extends Component {
 
     return (
       <StyledWrapper>
-        <TableHeader>My friends database:</TableHeader>
-        
-        <Table
-          friends={this.state.friends}
-          deleteFriend={this.deleteFriend}
-          editFriend={this.editFriend}
+        <Route path="/" component={FriendListHeader} />
+
+        <Route
+          path="/"
+          render={(props) =>
+            (<Table
+              friends={this.state.friends}
+              deleteFriend={this.deleteFriend}
+              editFriend={this.editFriend}
+              {...props}
+            />)
+          }
         />
 
-        <Form
-          postFriend={this.postFriend}
-          formObj={this.state.formObj}
-          formSubmit={this.formSubmit}
-          editingFriend={this.state.editingFriend}
-          putFriend={this.putFriend}
+        <Route
+          path="/"
+          exact
+          render={(props) =>
+            (<Form
+              postFriend={this.postFriend}
+              formObj={this.state.formObj}
+              formSubmit={this.formSubmit}
+              editingFriend={this.state.editingFriend}
+              putFriend={this.putFriend}
+              {...props}
+            />)
+          }
         />
       </StyledWrapper>
     );
@@ -165,11 +180,4 @@ const StyledWrapper = styled.div`
   margin: 1rem auto;
   text-align: center;
   font-size: 1rem;
-`;
-
-const TableHeader = styled.h1`
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: navy;
-  text-align: center;
 `;

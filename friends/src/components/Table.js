@@ -1,33 +1,51 @@
 import React from 'react';
+import { Route } from 'react-router-dom';
+import TableHead from './TableHead';
+import Friend from './Friend';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-export default function Table({ friends, deleteFriend, editFriend }) {
+export default function Table({ friends, deleteFriend, editFriend, }) {
+
+  function ClickedFriend(props) {
+    const friend = friends.find(
+      fr => {
+        return fr.id.toString() === props.match.params.id
+      }
+    );
+    return <Friend friend={friend} />
+  }
+
+  function MappedFriends() {
+    return (friends && friends.map(friend => (
+      <Friend
+        key={friend.id}
+        friend={friend}
+        editFriend={editFriend}
+        deleteFriend={deleteFriend}
+      />
+    )));
+  }
 
   return (
     <StyledTable>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Age</th>
-          <th>Email</th>
-        </tr>
-      </thead>
+      <Route path="/" component={TableHead} />
+
       <tbody>
-        {
-          friends && friends.map(friend => (
-            <tr key={friend.id}>
-              <td>{friend.id}</td>
-              <td>{friend.name}</td>
-              <td>{friend.age}</td>
-              <td>{friend.email}</td>
-              <td><StyledBtn onClick={() => editFriend(friend.id)}>Edit</StyledBtn></td>
-              <td><StyledBtn onClick={() => deleteFriend(friend.id)}>Delete</StyledBtn></td>
-            </tr>
-          ))
-        }
+        <Route
+          path="/"
+          exact
+          render={MappedFriends}
+        />
       </tbody>
+
+      <tbody>
+        <Route
+          path="/friend/:id"
+          render={ClickedFriend}
+        />
+      </tbody>
+
     </StyledTable>
   );
 }
@@ -50,17 +68,5 @@ const StyledTable = styled.table`
     tr {
       border-bottom: 1px solid navy;
     }
-  }
-`;
-
-const StyledBtn = styled.button`
-  padding: 0.5rem;
-  background-color: navy;
-  border: 1px solid navy;
-  color: white;
-  border-radius: 4px;
-  :hover {
-    background-color: white;
-    color: navy;
   }
 `;
