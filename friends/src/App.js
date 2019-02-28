@@ -7,13 +7,15 @@ import Form from './components/Form';
 export default class App extends Component {
   state = {
     friends: null,
+    editingFriend: false,
     loading: false,
     error: null,
     formObj: {
+      id: '',
       name: '',
       age: '',
       email: '',
-    }
+    },
   }
 
   componentDidMount() {
@@ -28,7 +30,6 @@ export default class App extends Component {
     this.loaderStart();
     this.resetError();
 
-    // Fetch data with axios
     axios.get('http://localhost:5000/friends')
       .then(friends => {
         this.setState({ friends: friends.data });
@@ -66,13 +67,39 @@ export default class App extends Component {
       .catch(this.setError);
   }
 
-  editFriend = (id) => {
+  putFriend = () => {
     this.loaderStart();
     this.resetError();
 
-    axios.put(`http://localhost:5000/friends/${id}`)
-      .then(resp => console.log(resp))
+    const { name, age, email, id } = this.state.formObj;
+    const friend = {name: name, age: Number(age), email: email};
+
+    axios.put(`http://localhost:5000/friends/${id}`, friend)
+      .then(this.fetchFriends)
       .catch(this.setError);
+
+    this.changeEditingState(false);
+    this.clearInputs();
+  }
+
+  changeEditingState = (bool) => {
+    this.setState({
+      editingFriend: bool,
+    });
+  }
+
+  editFriend = (id) => {
+    this.changeEditingState(true);
+
+    const editedFriend = this.state.friends.filter(friend => friend.id === id);
+    this.setState({
+      formObj: {
+        id: editedFriend[0].id,
+        name: editedFriend[0].name,
+        age: editedFriend[0].age,
+        email: editedFriend[0].email,
+      }
+    });
   }
 
   formSubmit = event => {
@@ -126,8 +153,9 @@ export default class App extends Component {
           postFriend={this.postFriend}
           formObj={this.state.formObj}
           formSubmit={this.formSubmit}
+          editingFriend={this.state.editingFriend}
+          putFriend={this.putFriend}
         />
-
       </StyledWrapper>
     );
   }

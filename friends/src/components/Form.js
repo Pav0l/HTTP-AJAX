@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-export default function Form({ formSubmit, postFriend, formObj }) {
+export default function Form({ formSubmit, postFriend, formObj, editingFriend, putFriend }) {
 
   const formSubmitHandler = event => {
     event.preventDefault();
@@ -10,8 +10,8 @@ export default function Form({ formSubmit, postFriend, formObj }) {
   }
 
   const onSubmitHandler = event => {
-    event.preventDefault();
-    postFriend();
+    event.preventDefault();    
+    editingFriend ? putFriend() : postFriend();
   }
   
   return (
@@ -49,19 +49,34 @@ export default function Form({ formSubmit, postFriend, formObj }) {
         required
       />
 
-      <button type="submit">Add Friend</button>
+      {
+        editingFriend
+        ?
+        <button type="submit">Edit Friend</button>
+        :
+        <button type="submit">Add Friend</button>
+      }
     </FriendForm>
   );
 }
 
+Form.defaultPropTypes = {
+  formObj: PropTypes.shape({
+    name: '',
+    age: '',
+    email: '',
+  }),
+}
+
 Form.propTypes = {
   formObj: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    age: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    age: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    email: PropTypes.string,
   }),
   formSubmit: PropTypes.func.isRequired,
   postFriend: PropTypes.func.isRequired,
+  putFriend: PropTypes.func.isRequired,
 }
 
 const FriendForm = styled.form`
