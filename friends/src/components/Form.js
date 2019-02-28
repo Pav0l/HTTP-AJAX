@@ -6,7 +6,6 @@ export default class Form extends React.Component {
   // const [formObj, setFormObj] = useState({id: null, name: '', age: null, email: ''});
   state = {
     formObj: {
-      id: null,
       name: '',
       age: '',
       email: '',
@@ -21,33 +20,19 @@ export default class Form extends React.Component {
     event.preventDefault();
     // setFormObj({
     //   ...formObj,
-    //   id: friends.length + 1,
     //   [event.target.name]: event.target.value,
     // })
     this.setState({
       formObj: {
         ...this.state.formObj,
-        id: this.props.friends.length + 1,
         [event.target.name]: event.target.value,
       }
     })
   }
 
-  /*
-    onFriendFormSubmit = (event) => {
-      event.preventDefault();
-      const { name, age, email } = this.state;
-      this.clearFriendForm();
-      const friend = {name: name, age: Number(age), email: email};
-      this.props.addFriend(friend); // Add friend to server
-    }
-  }
-  */
-
   clearInputs = () => {
     this.setState({
       formObj: {
-        id: null,
         name: '',
         age: '',
         email: '',
