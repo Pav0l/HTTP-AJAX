@@ -2,7 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-export default function Table({ friends }) {
+export default function Table({ friends, deleteFriend }) {
+
   return (
     <StyledTable>
       <thead>
@@ -21,6 +22,8 @@ export default function Table({ friends }) {
               <td>{friend.name}</td>
               <td>{friend.age}</td>
               <td>{friend.email}</td>
+              <td><StyledBtn>Edit</StyledBtn></td>
+              <td><StyledBtn onClick={() => deleteFriend(friend.id)}>Delete</StyledBtn></td>
             </tr>
           ))
         }
@@ -40,4 +43,22 @@ Table.propTypes = {
 
 const StyledTable = styled.table`
   margin: 1rem auto;
+  border-collapse: collapse;
+  tbody {
+    tr {
+      border-bottom: 1px solid navy;
+    }
+  }
+`;
+
+const StyledBtn = styled.button`
+  padding: 0.5rem;
+  background-color: navy;
+  border: 1px solid navy;
+  color: white;
+  border-radius: 4px;
+  :hover {
+    background-color: white;
+    color: navy;
+  }
 `;

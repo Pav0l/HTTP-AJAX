@@ -53,6 +53,12 @@ export default class App extends Component {
       .catch(err => console.log(err));
   }
 
+  deleteFriend = (id) => {
+    axios.delete(`http://localhost:5000/friends/${id}`)
+      .then(this.fetchFriends)
+      .catch(err => console.log(err));
+  }
+
   render() {
 
     if (this.state.loading) {
@@ -75,7 +81,10 @@ export default class App extends Component {
       <StyledWrapper>
         <TableHeader>My friends database:</TableHeader>
         
-        <Table friends={this.state.friends} />
+        <Table
+          friends={this.state.friends}
+          deleteFriend={this.deleteFriend}
+        />
 
         <Form
           friends={this.state.friends}
