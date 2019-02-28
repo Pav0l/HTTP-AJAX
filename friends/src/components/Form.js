@@ -2,99 +2,66 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-export default class Form extends React.Component {
-  // const [formObj, setFormObj] = useState({id: null, name: '', age: null, email: ''});
-  state = {
-    formObj: {
-      name: '',
-      age: '',
-      email: '',
-    }
-  }
+export default function Form({ formSubmit, postFriend, formObj }) {
 
-  // useEffect(() => {
-
-  // });
-
-  formSubmit = event => {
+  const formSubmitHandler = event => {
     event.preventDefault();
-    // setFormObj({
-    //   ...formObj,
-    //   [event.target.name]: event.target.value,
-    // })
-    this.setState({
-      formObj: {
-        ...this.state.formObj,
-        [event.target.name]: event.target.value,
-      }
-    })
+    formSubmit(event);    
   }
 
-  clearInputs = () => {
-    this.setState({
-      formObj: {
-        name: '',
-        age: '',
-        email: '',
-      }
-    })
-  }
-
-  onSubmitHandler = e => {
-    e.preventDefault();
-    const { name, age, email } = this.state.formObj;
-    const friend = {name: name, age: Number(age), email: email};
-    this.props.postFriend(friend);
-    this.clearInputs();
+  const onSubmitHandler = event => {
+    event.preventDefault();
+    postFriend();
   }
   
-  render () {
+  return (
+    <FriendForm onSubmit={onSubmitHandler}>
+      <label htmlFor="name">Name</label>
+      <input
+        type="text"
+        placeholder="Enter Friends Name"
+        name="name"
+        autoComplete="off"
+        value={formObj.name}
+        onChange={formSubmitHandler}
+        required
+      />
 
-    return (
-      <FriendForm onSubmit={this.onSubmitHandler}>
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          placeholder="Enter Friends Name"
-          name="name"
-          autoComplete="off"
-          value={this.state.formObj.name}
-          onChange={this.formSubmit}
-          required />
+      <label htmlFor="age">Age</label>
+      <input
+        type="text"
+        placeholder="Enter Friends Age"
+        name="age"
+        autoComplete="off"
+        value={formObj.age}
+        onChange={formSubmitHandler}
+        required
+      />
 
-        <label htmlFor="age">Age</label>
-        <input
-          type="text"
-          placeholder="Enter Friends Age"
-          name="age"
-          autoComplete="off"
-          value={this.state.formObj.age}
-          onChange={this.formSubmit}
-          required />
+      <label htmlFor="email">Email</label>
+      <input
+        type="email"
+        placeholder="Enter Friends Email"
+        name="email"
+        autoComplete="off"
+        value={formObj.email}
+        onChange={formSubmitHandler}
+        required
+      />
 
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          placeholder="Enter Friends Email"
-          name="email"
-          autoComplete="off"
-          value={this.state.formObj.email}
-          onChange={this.formSubmit}
-          required />
-
-        <button type="submit">Add Friend</button>
-      </FriendForm>
-    );
-  }
+      <button type="submit">Add Friend</button>
+    </FriendForm>
+  );
 }
 
 Form.propTypes = {
-  friends: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
+  formObj: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    age: PropTypes.number.isRequired,
+    age: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
-  })),
+  }),
+  formSubmit: PropTypes.func.isRequired,
+  postFriend: PropTypes.func.isRequired,
 }
 
 const FriendForm = styled.form`

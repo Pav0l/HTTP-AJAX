@@ -9,6 +9,11 @@ export default class App extends Component {
     friends: null,
     loading: false,
     error: null,
+    formObj: {
+      name: '',
+      age: '',
+      email: '',
+    }
   }
 
   componentDidMount() {
@@ -21,17 +26,7 @@ export default class App extends Component {
 
   fetchFriends = () => {
     this.loaderStart();
-
-    // Fetch data with JS fetch() method
-    /*
-    fetch('http://localhost:5000/friends')
-      .then(data => data.json())
-      .then(friends => {
-        this.setState({ friends });
-        this.loaderFinish();
-      })
-      .catch(this.setError);
-    */
+    this.resetError();
 
     // Fetch data with axios
     axios.get('http://localhost:5000/friends')
@@ -47,18 +42,56 @@ export default class App extends Component {
     this.setState({ error });
   }
 
-  postFriend = (friend) => {
+  resetError = () => this.setState({ error: null });
+
+  postFriend = () => {
     this.loaderStart();
+    this.resetError();
+
+    const { name, age, email } = this.state.formObj;
+    const friend = {name: name, age: Number(age), email: email};
+    
     axios.post('http://localhost:5000/friends', friend)
-      .then(this.fetchFriends)
-      .catch(this.setError);
+    .then(this.fetchFriends)
+    .catch(this.setError);
+
+    this.clearInputs()
   }
 
   deleteFriend = (id) => {
     this.loaderStart();
+    this.resetError();
     axios.delete(`http://localhost:5000/friends/${id}`)
       .then(this.fetchFriends)
       .catch(this.setError);
+  }
+
+  editFriend = (id) => {
+    this.loaderStart();
+    this.resetError();
+
+    axios.put(`http://localhost:5000/friends/${id}`)
+      .then(resp => console.log(resp))
+      .catch(this.setError);
+  }
+
+  formSubmit = event => {
+    this.setState({
+      formObj: {
+        ...this.state.formObj,
+        [event.target.name]: event.target.value,
+      }
+    });
+  }
+
+  clearInputs = () => {
+    this.setState({
+      formObj: {
+        name: '',
+        age: '',
+        email: '',
+      }
+    })
   }
 
   render() {
@@ -86,11 +119,13 @@ export default class App extends Component {
         <Table
           friends={this.state.friends}
           deleteFriend={this.deleteFriend}
+          editFriend={this.editFriend}
         />
 
         <Form
-          friends={this.state.friends}
           postFriend={this.postFriend}
+          formObj={this.state.formObj}
+          formSubmit={this.formSubmit}
         />
 
       </StyledWrapper>

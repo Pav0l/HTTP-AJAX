@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-export default function Table({ friends, deleteFriend }) {
+export default function Table({ friends, deleteFriend, editFriend }) {
 
   return (
     <StyledTable>
@@ -22,7 +22,7 @@ export default function Table({ friends, deleteFriend }) {
               <td>{friend.name}</td>
               <td>{friend.age}</td>
               <td>{friend.email}</td>
-              <td><StyledBtn>Edit</StyledBtn></td>
+              <td><StyledBtn onClick={() => editFriend(friend.id)}>Edit</StyledBtn></td>
               <td><StyledBtn onClick={() => deleteFriend(friend.id)}>Delete</StyledBtn></td>
             </tr>
           ))
@@ -39,6 +39,8 @@ Table.propTypes = {
     age: PropTypes.number.isRequired,
     email: PropTypes.string.isRequired,
   })),
+  deleteFriend: PropTypes.func.isRequired,
+  editFriend: PropTypes.func.isRequired,
 }
 
 const StyledTable = styled.table`
