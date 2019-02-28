@@ -159,7 +159,6 @@ export default class App extends Component {
 
         <Route
           path="/"
-          exact
           render={(props) =>
             (<Form
               postFriend={this.postFriend}

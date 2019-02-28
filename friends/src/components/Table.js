@@ -13,7 +13,7 @@ export default function Table({ friends, deleteFriend, editFriend, }) {
         return fr.id.toString() === props.match.params.id
       }
     );
-    return <Friend friend={friend} />
+    return <Friend friend={friend} deleteFriend={deleteFriend} editFriend={editFriend} />
   }
 
   function MappedFriends() {
